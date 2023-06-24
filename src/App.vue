@@ -70,7 +70,7 @@ onMounted(() => {
     </div>
 
     <!-- COMPANY ROW -->
-    <div class = "flex flex-row relative container mx-auto justify-around my-5 bg-white rounded-lg" v-for="job in jobs" :key="job.id" >
+      <div class = "flex flex-row relative container mx-auto justify-around mt-5 bg-white rounded-lg" v-for="job in jobs" :key="job.id" >
       <!-- COMPANY LOGO + DETAILS -->
       <div v-if="findCommonElements(job.keywords) || selectedKeywords.length === 0 " class="flex flex-row h-48">
         <!-- COMPANY LOGO -->
