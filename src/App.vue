@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 
 const jobs = ref(null)
+const fetchError = ref(null)
 let selectedKeywords = ref([])
 
 function removeSelectedKeyword(key) {
@@ -16,8 +17,7 @@ function clearSelectedKeywords() {
 }
 
 
-function addToSelectedKeywords (e){
-  console.log(e.target.innerText)
+function addToSelectedKeywords(e) {
   if (!selectedKeywords.value.includes(e.target.innerText)) {
   selectedKeywords.value.push(e.target.innerText)
   }
@@ -31,10 +31,22 @@ function findCommonElements(arr1) {
 
 async function fetchData() {
   jobs.value = null
-  const res = await fetch(
-"https://storage.googleapis.com/programiz-static/hiring/software/job-listing-page-challenge/data.json"
-  )
-  jobs.value = await res.json()
+  try {
+    const res = await fetch(
+      "https://storage.googleapis.com/programiz-static/hiring/software/job-listing-page-challenge/data.json"
+    )
+    if (res.status == 404) {
+      throw new Error("Page Not Found")
+    } else if (res.status == 500) {
+      throw new Error("Server Error");
+    } else if (!res.ok) {
+      throw new Error(`Http error! Status: ${res.status}`)
+    }
+    jobs.value = await res.json()
+  } catch (error) {
+    console.log(error)
+    fetchError.value = error.message
+  }
 }
 
 
@@ -45,6 +57,11 @@ onMounted(() => {
 
 </script>
 <template>
+    <div v-if = "fetchError !== null" class="flex justify-center items-center  h-screen bg-red-950">
+      <div class="w-2/3 text-7xl break-normal text-red-500 ">
+        Something went wrong. Please try again later.
+      </div>
+    </div>
     <!-- FILTERS -->
     <div v-if="selectedKeywords.length > 0 ">
       <div
