@@ -97,8 +97,7 @@ onMounted(() => {
               :src=job.company_logo
               alt="logo"
             />
-        </div>
-
+          </div>
         <!-- COMPANY DETAILS -->
         <div class="flex flex-col justify-center">
           <div class="">{{job.company}}</div>
